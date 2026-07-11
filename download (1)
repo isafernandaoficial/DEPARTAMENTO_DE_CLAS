@@ -1,0 +1,128 @@
+import React, { useState } from "react";
+import { Sparkles, Lock } from "lucide-react";
+import { p, serif, sans } from "../theme.js";
+import { supabase } from "../lib/supabaseClient.js";
+
+function Campo({ label, value, onChange, placeholder, opcional }) {
+  return (
+    <div>
+      <label className="text-xs font-medium mb-1.5 block" style={{ color: p.ink }}>
+        {label} {opcional && <span className="font-normal" style={{ color: p.muted }}>(opcional)</span>}
+      </label>
+      <input
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        className="w-full text-sm rounded-lg px-3.5 py-2.5 border outline-none"
+        style={{ borderColor: p.line, backgroundColor: p.ivory, color: p.ink }}
+      />
+    </div>
+  );
+}
+
+const vazio = {
+  nome: "", nascimento: "", filhos: "", estado_civil: "", cidade: "", estado: "",
+  instagram: "", como_conheceu: "", fase_caminhada: "",
+};
+
+export default function FormularioEntrada() {
+  const [form, setForm] = useState(vazio);
+  const [enviando, setEnviando] = useState(false);
+  const [enviado, setEnviado] = useState(false);
+
+  const set = (campo) => (e) => setForm({ ...form, [campo]: e.target.value });
+
+  async function enviar() {
+    setEnviando(true);
+    const { data: novoMembro, error } = await supabase
+      .from("membros")
+      .insert([
+        {
+          nome: form.nome,
+          data_nascimento: form.nascimento,
+          filhos: form.filhos,
+          estado_civil: form.estado_civil,
+          cidade: form.cidade,
+          estado: form.estado,
+          instagram: form.instagram,
+          como_conheceu: form.como_conheceu,
+          status: "Primeira Vez",
+        },
+      ])
+      .select()
+      .single();
+
+    if (!error && novoMembro && form.fase_caminhada) {
+      await supabase
+        .from("membros_caminhada")
+        .insert([{ membro_id: novoMembro.id, fase_caminhada: form.fase_caminhada }]);
+    }
+
+    setEnviando(false);
+    if (!error) {
+      setEnviado(true);
+      setForm(vazio);
+    }
+  }
+
+  return (
+    <div className="min-h-screen w-full flex items-start justify-center px-6 py-14" style={{ backgroundColor: p.ivoryDeep, fontFamily: sans }}>
+      <div className="max-w-xl w-full">
+        <div className="text-center mb-8">
+          <Sparkles size={22} color={p.gold} className="mx-auto mb-3" />
+          <h1 className="text-2xl mb-2" style={{ color: p.ink, fontFamily: serif }}>
+            Parabéns por dar um passo importante na sua caminhada
+          </h1>
+          <p className="text-sm" style={{ color: p.muted }}>
+            Agora vou precisar de algumas informações para te conhecer melhor.
+          </p>
+        </div>
+
+        {enviado ? (
+          <div className="rounded-2xl border p-6 text-center" style={{ backgroundColor: p.ivory, borderColor: p.line }}>
+            <p className="text-sm" style={{ color: p.ink }}>Recebemos suas informações. Seja bem vinda ao Clã!</p>
+          </div>
+        ) : (
+          <div className="rounded-2xl border p-6 flex flex-col gap-4" style={{ backgroundColor: p.ivory, borderColor: p.line }}>
+            <Campo label="Nome completo" value={form.nome} onChange={set("nome")} placeholder="Digite seu nome completo" />
+            <Campo label="Data de nascimento" value={form.nascimento} onChange={set("nascimento")} placeholder="DD/MM/AAAA" />
+            <div className="grid grid-cols-2 gap-4">
+              <Campo label="Filhos" value={form.filhos} onChange={set("filhos")} placeholder="Quantos" />
+              <Campo label="Estado civil" value={form.estado_civil} onChange={set("estado_civil")} placeholder="Ex: Casada" />
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              <Campo label="Cidade" value={form.cidade} onChange={set("cidade")} placeholder="Sua cidade" />
+              <Campo label="Estado" value={form.estado} onChange={set("estado")} placeholder="UF" />
+            </div>
+            <Campo label="Instagram" value={form.instagram} onChange={set("instagram")} placeholder="@seuinstagram" opcional />
+            <Campo label="Como conheceu o Clã" value={form.como_conheceu} onChange={set("como_conheceu")} placeholder="Conte pra gente" />
+            <div>
+              <label className="text-xs font-medium mb-1.5 block" style={{ color: p.ink }}>
+                Como você está nessa fase da sua caminhada
+              </label>
+              <textarea
+                value={form.fase_caminhada}
+                onChange={set("fase_caminhada")}
+                placeholder="Fique à vontade para compartilhar como você está"
+                rows={3}
+                className="w-full text-sm rounded-lg px-3.5 py-2.5 border outline-none resize-none"
+                style={{ borderColor: p.line, backgroundColor: p.ivory, color: p.ink }}
+              />
+              <p className="text-[11px] mt-1.5 flex items-center gap-1" style={{ color: p.muted }}>
+                <Lock size={10} /> Essa resposta fica visível só para o núcleo do Clã
+              </p>
+            </div>
+            <button
+              onClick={enviar}
+              disabled={enviando}
+              className="w-full text-sm font-medium py-3 rounded-lg mt-2 disabled:opacity-60"
+              style={{ backgroundColor: p.wine, color: p.ivory }}
+            >
+              {enviando ? "Enviando..." : "Enviar e entrar para o Clã"}
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}

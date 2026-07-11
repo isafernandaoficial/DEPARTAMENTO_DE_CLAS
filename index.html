@@ -1,0 +1,65 @@
+import React, { useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight, Clock, Check } from "lucide-react";
+import Sidebar from "../components/Sidebar.jsx";
+import { p, serif, sans } from "../theme.js";
+import { supabase } from "../lib/supabaseClient.js";
+
+const eventosExemplo = [
+  { data: "14 jul", hora: "20h00", duplas: "Ana Beatriz & Fernanda", status: "Agendado" },
+  { data: "18 jul", hora: "19h30", duplas: "Elisa & Gabriela", status: "Agendado" },
+  { data: "02 jul", hora: "20h00", duplas: "Camila & Débora", status: "Aconteceu" },
+];
+
+export default function CafesOnline() {
+  const [eventos, setEventos] = useState(eventosExemplo);
+
+  useEffect(() => {
+    async function load() {
+      const { data, error } = await supabase.from("cafes_online").select("*").order("data", { ascending: true });
+      if (!error && data && data.length > 0) setEventos(data);
+    }
+    load();
+  }, []);
+
+  return (
+    <div className="min-h-screen w-full flex" style={{ backgroundColor: p.ivoryDeep, fontFamily: sans }}>
+      <Sidebar />
+      <main className="flex-1 px-6 md:px-10 py-8 max-w-5xl">
+        <div className="flex items-center justify-between mb-8">
+          <h1 className="text-3xl" style={{ color: p.ink, fontFamily: serif }}>Cafés Online</h1>
+          <button className="text-xs font-medium px-4 py-2.5 rounded-lg" style={{ backgroundColor: p.wine, color: p.ivory }}>
+            + Agendar café
+          </button>
+        </div>
+        <div className="flex items-center gap-3 mb-5 text-sm" style={{ color: p.ink }}>
+          <ChevronLeft size={16} color={p.muted} />
+          <span style={{ fontFamily: serif }}>Julho 2026</span>
+          <ChevronRight size={16} color={p.muted} />
+        </div>
+        <div className="flex flex-col gap-3">
+          {eventos.map((c, i) => (
+            <div key={i} className="flex items-center gap-4 rounded-xl border p-4" style={{ backgroundColor: p.ivory, borderColor: p.line }}>
+              <div className="h-11 w-11 rounded-xl flex flex-col items-center justify-center shrink-0" style={{ backgroundColor: p.ivoryDeep }}>
+                <span className="text-[10px] leading-none" style={{ color: p.muted }}>{c.data.split(" ")[1]}</span>
+                <span className="text-sm font-semibold leading-none mt-0.5" style={{ color: p.wine, fontFamily: serif }}>{c.data.split(" ")[0]}</span>
+              </div>
+              <div className="flex-1">
+                <p className="text-sm font-medium" style={{ color: p.ink }}>{c.duplas}</p>
+                <p className="text-xs flex items-center gap-1 mt-0.5" style={{ color: p.muted }}><Clock size={11} /> {c.hora}</p>
+              </div>
+              {c.status === "Aconteceu" ? (
+                <span className="text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1 font-medium" style={{ backgroundColor: p.wine, color: p.ivory }}>
+                  <Check size={11} /> Aconteceu
+                </span>
+              ) : (
+                <span className="text-[11px] px-2.5 py-1 rounded-full font-medium" style={{ backgroundColor: p.gold, color: p.wineDeep }}>
+                  Agendado
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+      </main>
+    </div>
+  );
+}
