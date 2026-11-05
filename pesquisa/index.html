@@ -1,0 +1,255 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Questionário dos clãs online da Get Church Global.">
+<meta name="robots" content="noindex">
+<title>Minha Caminhada no Clã</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: uma pergunta por tela, coluna estreita centrada, toque grande, barra de progresso no topo */
+:root{
+  --bg:#FAF1E8; --fg:#0F2226; --card:#FFFFFF; --line:#E2CDB8; --muted:#4A5458;
+  --coral:#FF7A59; --coral-ink:#B9432A; --rosa:#FFB8D9; --gold:#C9924B; --gold-ink:#8A5A1F;
+  --on-coral:#0F2226; --chip:#F3E3D3;
+  --display:"Unbounded", "Arial Black", Arial, sans-serif;
+  --body:"Montserrat", "Segoe UI", Arial, sans-serif;
+}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){
+  --bg:#0F2226; --fg:#FAF1E8; --card:#17323A; --line:#2A4650; --muted:#B9C3C5;
+  --coral:#FF7A59; --coral-ink:#FF9A7E; --rosa:#FFB8D9; --gold:#C9924B; --gold-ink:#D9A866;
+  --on-coral:#0F2226; --chip:#1E3D46; color-scheme:dark } }
+:root[data-theme="dark"]{
+  --bg:#0F2226; --fg:#FAF1E8; --card:#17323A; --line:#2A4650; --muted:#B9C3C5;
+  --coral:#FF7A59; --coral-ink:#FF9A7E; --rosa:#FFB8D9; --gold:#C9924B; --gold-ink:#D9A866;
+  --on-coral:#0F2226; --chip:#1E3D46; color-scheme:dark }
+*{box-sizing:border-box}
+body{margin:0; background:var(--bg); color:var(--fg); font-family:var(--body); font-size:16px; line-height:1.5;
+  padding-left:max(16px, env(safe-area-inset-left, 0px)); padding-right:max(16px, env(safe-area-inset-right, 0px)); padding-block:0}
+.wrap{max-width:560px; margin:0 auto; min-height:100vh; display:flex; flex-direction:column; padding-block:20px 32px; gap:20px}
+.top{display:flex; align-items:center; justify-content:space-between; gap:12px}
+.brand{display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:600; font-size:11px; letter-spacing:.14em; text-transform:uppercase}
+.brand img{height:30px; width:auto}
+.demo{font-size:12px; font-weight:600; color:var(--gold-ink); border:1px solid var(--line); border-radius:999px; padding:4px 10px}
+.progress{height:6px; background:var(--chip); border-radius:999px; overflow:hidden}
+.progress span{display:block; height:100%; background:var(--coral); width:0; transition:width .3s ease}
+.meta{display:flex; justify-content:space-between; font-size:13px; color:var(--muted); font-weight:600}
+.sec{font-family:var(--display); font-weight:600; font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--coral-ink)}
+h1{font-family:var(--display); font-weight:800; font-size:clamp(26px, 7vw, 34px); line-height:1.15; margin:0; text-wrap:balance}
+h2{font-family:var(--display); font-weight:600; font-size:clamp(20px, 5.4vw, 24px); line-height:1.3; margin:0; text-wrap:balance}
+p{margin:0}
+.lead{font-size:17px; color:var(--muted)}
+.hint{font-size:14px; color:var(--muted)}
+.opts{display:flex; flex-direction:column; gap:10px}
+.opt{display:flex; align-items:center; gap:14px; width:100%; min-height:56px; text-align:left; font:inherit; font-weight:600; font-size:16px;
+  color:var(--fg); background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:14px 18px; cursor:pointer; transition:border-color .15s, background .15s}
+.opt:hover{border-color:var(--coral)}
+.opt .mark{width:22px; height:22px; flex-shrink:0; border:2px solid var(--line); border-radius:50%; display:flex; align-items:center; justify-content:center}
+.opt.multi .mark{border-radius:6px}
+.opt[aria-pressed="true"]{border-color:var(--coral); background:color-mix(in srgb, var(--coral) 14%, var(--card))}
+.opt[aria-pressed="true"] .mark{background:var(--coral); border-color:var(--coral)}
+.opt[aria-pressed="true"] .mark::after{content:""; width:8px; height:8px; border-radius:2px; background:var(--on-coral)}
+.scale{display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:8px}
+.scale .opt{justify-content:center; padding:0; min-height:64px; font-family:var(--display); font-size:20px}
+.scale-ends{display:flex; justify-content:space-between; font-size:13px; color:var(--muted); font-weight:600}
+input[type=text], input[type=tel], textarea{width:100%; font:inherit; font-size:16px; color:var(--fg); background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:14px 16px}
+textarea{min-height:130px; resize:vertical}
+label{font-weight:600; font-size:14px; display:block; margin-bottom:6px}
+.field{display:flex; flex-direction:column}
+.actions{display:flex; gap:10px; align-items:center; margin-top:auto; padding-top:8px}
+.btn{font:inherit; font-weight:700; font-size:16px; border-radius:999px; padding:14px 26px; cursor:pointer; border:1.5px solid transparent; min-height:52px}
+.btn.primary{background:var(--fg); color:var(--bg)}
+.btn.primary:disabled{opacity:.4; cursor:not-allowed}
+.btn.ghost{background:transparent; color:var(--fg); border-color:var(--line)}
+.btn.link{background:transparent; color:var(--muted); padding-inline:12px}
+.grow{flex:1}
+:focus-visible{outline:3px solid var(--gold); outline-offset:2px}
+.hero{display:flex; flex-direction:column; gap:18px; padding-top:12px}
+.hero .logo{width:76px; height:auto}
+.facts{display:flex; flex-wrap:wrap; gap:8px}
+.facts span{background:var(--chip); border-radius:999px; padding:7px 14px; font-size:14px; font-weight:600}
+.band{background:var(--rosa); color:#0F2226; border-radius:16px; padding:18px 20px; font-size:15px; font-weight:500}
+.done{display:flex; flex-direction:column; gap:16px; padding-top:20px}
+.done .check{width:64px; height:64px; border-radius:50%; background:var(--coral); display:flex; align-items:center; justify-content:center}
+details{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:12px 16px}
+summary{cursor:pointer; font-weight:600}
+pre{white-space:pre-wrap; word-break:break-word; font-size:13px; margin:10px 0 0; max-height:320px; overflow:auto}
+.err{color:var(--coral-ink); font-weight:600; font-size:14px}
+@media (prefers-reduced-motion: reduce){ *{transition:none !important} }
+</style>
+</head>
+<body>
+<div class="wrap" id="app" aria-live="polite"></div>
+
+<script>
+/* Configuração do envio. Chave pública: a tabela só aceita inserir, ninguém lê pelo site. Vazio = prévia. */
+const SUPABASE_URL = "https://optkfkzubuxvmjbxmhpz.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wdGtma3p1YnV4dm1qYnhtaHB6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODYxMzQ5NzksImV4cCI6MjEwMTcxMDk3OX0.bx2VjVrQL5HnbMA4EXc4xavB8WfkfBmsdPtErOZjgCo";
+const TABELA = "pesquisa_clas_respostas";
+const LOGO = "data:image/png;base64,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";
+
+const Q = [
+  {id:"cla", sec:"Sobre você", type:"text", q:"Qual é o seu clã?", ph:"Nome do clã", req:true},
+  {id:"funcao", sec:"Sobre você", type:"single", q:"Como você participa do clã?", o:["Visitante","Membro","Núcleo","Líder de clã"]},
+  {id:"tempo_cla", sec:"Sobre você", type:"single", q:"Há quanto tempo você está no clã?", o:["Menos de 1 mês","1 a 6 meses","6 meses a 1 ano","Mais de 1 ano"]},
+  {id:"frequencia", sec:"Saúde do clã", type:"single", q:"Com que frequência você participa dos encontros?", o:["Toda semana","2 a 3 vezes por mês","1 vez por mês","Raramente"]},
+  {id:"contato_semana", sec:"Saúde do clã", type:"single", q:"Nas últimas semanas, alguém do clã falou com você fora do encontro?", o:["Sim, toda semana","Às vezes","Não"]},
+  {id:"contato_falta", sec:"Saúde do clã", type:"single", q:"Quando você falta, alguém do clã entra em contato?", o:["Sempre","Às vezes","Nunca","Não costumo faltar"]},
+  {id:"pontualidade", sec:"Saúde do clã", type:"single", q:"O encontro começa e termina no horário?", o:["Sempre","Quase sempre","Raramente"]},
+  {id:"acolhimento", sec:"Sua experiência", type:"scale", q:"Quanto você se sente em casa no seu clã?", lo:"Pouco", hi:"Totalmente"},
+  {id:"ajuda", sec:"Sua experiência", type:"multi", q:"O que mais fortalece você no encontro?", o:["A palavra","O louvor","A oração","A conversa","O quebra-gelo","As amizades"]},
+  {id:"dificuldades", sec:"Sua experiência", type:"multi", q:"O que mais dificulta participar online?", o:["Horário","Internet ou conexão","Abrir a câmera","Pouca interação","Falta de tempo","Nada dificulta"]},
+  {id:"convidaria", sec:"Sua experiência", type:"single", q:"Você convidaria alguém para o seu clã?", o:["Com certeza","Talvez","Ainda não"]},
+  {id:"vida_deus", sec:"Caminhada e liderança", type:"single", q:"Como está sua vida com Deus hoje?", o:["Crescendo","Estável","Distante","Recomeçando"]},
+  {id:"estudo", sec:"Caminhada e liderança", type:"single", q:"Você participa de algum curso ou estudo da igreja?", o:["Instituto Teológico Get","Outro curso da igreja","Ainda não, mas quero","Ainda não"]},
+  {id:"serve", sec:"Caminhada e liderança", type:"single", q:"Você já serve em alguma área?", o:["Sim, no clã","Sim, em outro ministério","Ainda não, mas quero","Ainda não"]},
+  {id:"preparar", sec:"Caminhada e liderança", type:"single", q:"Você gostaria de ser preparado(a) para ajudar a liderar um clã?", o:["Sim","Talvez","Agora não"]},
+  {id:"horas_servir", sec:"Quem serve", type:"single", q:"Quantas horas por semana você consegue dedicar ao servir?", o:["Até 2 horas","2 a 4 horas","4 a 6 horas","Mais de 6 horas"], cond:serveOuLidera},
+  {id:"rotina", sec:"Quem serve", type:"multi", q:"Como está a sua rotina hoje?", o:["Trabalho intenso","Estudos","Família pedindo atenção","Muitas tarefas na igreja","Tempo disponível","Momento tranquilo"], cond:serveOuLidera},
+  {id:"necessidades", sec:"Quem serve", type:"multi", q:"O que você mais precisa para continuar servindo bem?", o:["Treinamento","Acompanhamento de um líder","Materiais prontos","Mais tempo","Oração e cuidado","Reconhecimento"], cond:serveOuLidera},
+  {id:"animo_servir", sec:"Quem serve", type:"scale", q:"Como está seu ânimo para servir hoje?", lo:"Cansado(a)", hi:"Muito animado(a)", cond:serveOuLidera},
+  {id:"mensagem", sec:"Para terminar", type:"long", q:"Quer deixar uma mensagem para a liderança?", ph:"Escreva aqui, se quiser"},
+  {id:"cafe", sec:"Para terminar", type:"cafe", q:"Quer receber um café online de 15 minutos com alguém do clã?", o:["Sim, quero","Agora não"]}
+];
+
+function serveOuLidera(a){
+  return a.funcao === "Núcleo" || a.funcao === "Líder de clã" || (a.serve || "").startsWith("Sim");
+}
+
+const app = document.getElementById("app");
+{ const ic = document.createElement("link"); ic.rel = "icon"; ic.href = LOGO; document.head.appendChild(ic); }
+const A = {};
+let step = -1;
+
+function visiveis(){ return Q.filter(q => !q.cond || q.cond(A)); }
+function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
+
+function topo(){
+  const demo = SUPABASE_URL ? "" : '<span class="demo">Prévia</span>';
+  return '<div class="top"><div class="brand"><img src="' + LOGO + '" alt="">Get Church · Clãs</div>' + demo + '</div>';
+}
+
+function inicio(){
+  app.innerHTML = topo() +
+    '<div class="hero"><img class="logo" src="' + LOGO + '" alt="Logo da Get Church">' +
+    '<h1>Minha caminhada no clã</h1>' +
+    '<p class="lead">Suas respostas ajudam a liderança a cuidar melhor de cada pessoa e a preparar quem serve.</p>' +
+    '<div class="facts"><span>Cerca de 3 minutos</span><span>Toque para responder</span></div>' +
+    '<div class="band">Nome e telefone são pedidos só no final, e só se você quiser receber um café online.</div></div>' +
+    '<div class="actions"><button class="btn primary grow" id="comecar" type="button">Começar</button></div>';
+  document.getElementById("comecar").onclick = () => { step = 0; render(); };
+}
+
+function render(){
+  if (step < 0) return inicio();
+  const vs = visiveis();
+  if (step >= vs.length) return enviar();
+  const q = vs[step];
+  const pct = Math.round((step / vs.length) * 100);
+  let corpo = "";
+  const v = A[q.id];
+  if (q.type === "single" || q.type === "cafe"){
+    corpo = '<div class="opts" role="group" aria-label="' + esc(q.q) + '">' + q.o.map((o,i) =>
+      '<button type="button" class="opt" data-i="' + i + '" aria-pressed="' + (v === o) + '"><span class="mark"></span>' + esc(o) + '</button>').join("") + '</div>';
+    if (q.type === "cafe" && v === "Sim, quero"){
+      corpo += '<div class="field"><label for="nome">Seu nome</label><input id="nome" type="text" autocomplete="name" value="' + esc(A.nome || "") + '"></div>' +
+               '<div class="field"><label for="whatsapp">WhatsApp com DDD</label><input id="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="(00) 00000-0000" value="' + esc(A.whatsapp || "") + '"></div>' +
+               '<p class="hint">Seu nome e telefone ficam só com a liderança do departamento e servem apenas para marcar o café.</p>';
+    }
+  } else if (q.type === "multi"){
+    const sel = v || [];
+    corpo = '<p class="hint">Escolha quantas quiser.</p><div class="opts" role="group" aria-label="' + esc(q.q) + '">' + q.o.map((o,i) =>
+      '<button type="button" class="opt multi" data-i="' + i + '" aria-pressed="' + sel.includes(o) + '"><span class="mark"></span>' + esc(o) + '</button>').join("") + '</div>';
+  } else if (q.type === "scale"){
+    corpo = '<div class="scale" role="group" aria-label="' + esc(q.q) + '">' + [1,2,3,4,5].map(n =>
+      '<button type="button" class="opt" data-n="' + n + '" aria-pressed="' + (v === n) + '" aria-label="' + n + ' de 5">' + n + '</button>').join("") + '</div>' +
+      '<div class="scale-ends"><span>1 · ' + esc(q.lo) + '</span><span>5 · ' + esc(q.hi) + '</span></div>';
+  } else if (q.type === "text"){
+    corpo = '<div class="field"><label for="campo">Resposta</label><input id="campo" type="text" placeholder="' + esc(q.ph) + '" value="' + esc(v || "") + '"></div>';
+  } else if (q.type === "long"){
+    corpo = '<div class="field"><label for="campo">Mensagem (opcional)</label><textarea id="campo" placeholder="' + esc(q.ph) + '">' + esc(v || "") + '</textarea></div>';
+  }
+  const ultimo = step === vs.length - 1;
+  const precisaBotao = q.type !== "single" && q.type !== "scale";
+  const pronto = q.type === "text" ? !!(v && v.trim()) : q.type === "cafe" ? !!v : true;
+  app.innerHTML = topo() +
+    '<div class="progress" aria-hidden="true"><span style="width:' + pct + '%"></span></div>' +
+    '<div class="meta"><span>' + esc(q.sec) + '</span><span>' + (step + 1) + ' de ' + vs.length + '</span></div>' +
+    '<h2 id="pergunta">' + esc(q.q) + '</h2>' + corpo +
+    '<div class="actions"><button type="button" class="btn ghost" id="voltar">Voltar</button>' +
+    (q.type === "multi" || q.type === "long" ? '<button type="button" class="btn link" id="pular">Pular</button>' : '') +
+    (precisaBotao ? '<button type="button" class="btn primary grow" id="seguir"' + (pronto ? '' : ' disabled') + '>' + (ultimo ? 'Enviar respostas' : 'Continuar') + '</button>' : '') +
+    '</div>';
+  ligar(q, ultimo);
+  requestAnimationFrame(() => { const t = document.getElementById("pergunta"); if (t) t.setAttribute("tabindex","-1"); });
+}
+
+function avancar(){ step++; render(); window.scrollTo(0,0); }
+
+function ligar(q, ultimo){
+  document.getElementById("voltar").onclick = () => { step--; render(); };
+  const pular = document.getElementById("pular");
+  if (pular) pular.onclick = () => { delete A[q.id]; avancar(); };
+  const seguir = document.getElementById("seguir");
+  app.querySelectorAll(".opt").forEach(b => b.onclick = () => {
+    if (q.type === "single"){ A[q.id] = q.o[+b.dataset.i]; render(); setTimeout(avancar, 200); }
+    else if (q.type === "scale"){ A[q.id] = +b.dataset.n; render(); setTimeout(avancar, 200); }
+    else if (q.type === "multi"){ const o = q.o[+b.dataset.i]; const s = new Set(A[q.id] || []); s.has(o) ? s.delete(o) : s.add(o); A[q.id] = [...s]; b.setAttribute("aria-pressed", s.has(o)); }
+    else if (q.type === "cafe"){ A.cafe = q.o[+b.dataset.i]; if (A.cafe !== "Sim, quero"){ delete A.nome; delete A.whatsapp; } render(); }
+  });
+  const campo = document.getElementById("campo");
+  if (campo){ campo.oninput = () => { A[q.id] = campo.value; if (seguir && q.req) seguir.disabled = !campo.value.trim(); }; campo.focus(); }
+  const nome = document.getElementById("nome"), zap = document.getElementById("whatsapp");
+  if (nome) nome.oninput = () => A.nome = nome.value;
+  if (zap) zap.oninput = () => A.whatsapp = zap.value;
+  if (seguir) seguir.onclick = avancar;
+}
+
+function linha(){
+  const r = {versao:"v1"};
+  visiveis().forEach(q => {
+    if (q.type === "cafe"){ r.quer_cafe = A.cafe === "Sim, quero"; }
+    else if (A[q.id] !== undefined && A[q.id] !== "") r[q.id] = typeof A[q.id] === "string" ? A[q.id].trim() : A[q.id];
+  });
+  if (r.quer_cafe){ if (A.nome) r.nome = A.nome.trim(); if (A.whatsapp) r.whatsapp = A.whatsapp.trim(); }
+  return r;
+}
+
+async function enviar(){
+  const r = linha();
+  app.innerHTML = topo() + '<div class="done"><h2>Enviando...</h2></div>';
+  if (!SUPABASE_URL){
+    return fim(r, "Nesta versão de prévia as respostas ainda não são salvas.");
+  }
+  try{
+    const res = await fetch(SUPABASE_URL + "/rest/v1/" + TABELA, {
+      method:"POST",
+      headers:{"apikey":SUPABASE_KEY, "Authorization":"Bearer " + SUPABASE_KEY, "Content-Type":"application/json", "Prefer":"return=minimal"},
+      body: JSON.stringify(r)
+    });
+    if (!res.ok) throw new Error(res.status);
+    fim(null, "Muito obrigado por responder.");
+  } catch(e){
+    app.innerHTML = topo() + '<div class="done"><h2>Não foi possível enviar agora</h2><p class="err">Verifique sua internet e tente de novo. Suas respostas continuam aqui.</p></div>' +
+      '<div class="actions"><button class="btn ghost" type="button" id="voltar">Voltar</button><button class="btn primary grow" type="button" id="denovo">Tentar de novo</button></div>';
+    document.getElementById("voltar").onclick = () => { step = visiveis().length - 1; render(); };
+    document.getElementById("denovo").onclick = enviar;
+  }
+}
+
+function fim(r, msg){
+  app.innerHTML = topo() + '<div class="done"><div class="check" aria-hidden="true"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0F2226" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></div>' +
+    '<h1>' + (r ? 'Prévia concluída' : 'Respostas recebidas!') + '</h1><p class="lead">' + esc(msg) + ' Cada resposta ajuda a liderança a cuidar melhor do seu clã.</p>' +
+    (A.cafe === "Sim, quero" ? '<div class="band">Alguém do seu clã vai entrar em contato para marcar o café online.</div>' : '') +
+    (r ? '<details><summary>Ver os dados desta prévia</summary><pre>' + esc(JSON.stringify(r, null, 2)) + '</pre></details>' : '') +
+    '</div><div class="actions"><button class="btn ghost grow" type="button" id="reiniciar">Responder de novo</button></div>';
+  document.getElementById("reiniciar").onclick = () => { for (const k in A) delete A[k]; step = -1; render(); };
+}
+
+render();
+</script>
+
+</body>
+</html>
