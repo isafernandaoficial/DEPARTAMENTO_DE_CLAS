@@ -1,0 +1,43 @@
+name: Publicar questionário dos clãs
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "pesquisa/**"
+      - ".github/workflows/pesquisa-pages.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}pesquisa/
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Montar o site
+        run: |
+          mkdir -p _site/pesquisa
+          cp -R pesquisa/. _site/pesquisa/
+          touch _site/.nojekyll
+          printf '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=pesquisa/"><title>Clãs Online</title><a href="pesquisa/">Abrir o questionário</a>\n' > _site/index.html
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deploy
+        uses: actions/deploy-pages@v4
