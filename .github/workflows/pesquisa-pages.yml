@@ -1,10 +1,11 @@
-name: Publicar questionário dos clãs
+name: Publicar questionário e painel dos clãs
 
 on:
   push:
     branches: [main]
     paths:
       - "pesquisa/**"
+      - "painel/**"
       - ".github/workflows/pesquisa-pages.yml"
   workflow_dispatch:
 
@@ -28,8 +29,9 @@ jobs:
 
       - name: Montar o site
         run: |
-          mkdir -p _site/pesquisa
+          mkdir -p _site/pesquisa _site/painel
           cp -R pesquisa/. _site/pesquisa/
+          cp -R painel/. _site/painel/
           touch _site/.nojekyll
           printf '<!doctype html><meta charset="utf-8"><meta http-equiv="refresh" content="0; url=pesquisa/"><title>Clãs Online</title><a href="pesquisa/">Abrir o questionário</a>\n' > _site/index.html
 
