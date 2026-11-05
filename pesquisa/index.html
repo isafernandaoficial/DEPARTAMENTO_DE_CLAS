@@ -54,7 +54,7 @@ p{margin:0}
 .scale{display:grid; grid-template-columns:repeat(5, minmax(0, 1fr)); gap:8px}
 .scale .opt{justify-content:center; padding:0; min-height:64px; font-family:var(--display); font-size:20px}
 .scale-ends{display:flex; justify-content:space-between; font-size:13px; color:var(--muted); font-weight:600}
-input[type=text], input[type=tel], textarea{width:100%; font:inherit; font-size:16px; color:var(--fg); background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:14px 16px}
+input[type=text], input[type=tel], input[type=email], textarea{width:100%; font:inherit; font-size:16px; color:var(--fg); background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:14px 16px}
 textarea{min-height:130px; resize:vertical}
 label{font-weight:600; font-size:14px; display:block; margin-bottom:6px}
 .field{display:flex; flex-direction:column}
@@ -91,7 +91,7 @@ const TABELA = "pesquisa_clas_respostas";
 const LOGO = "data:image/png;base64,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";
 
 const Q = [
-  {id:"cla", sec:"Sobre você", type:"text", q:"Qual é o seu clã?", ph:"Nome do clã", req:true},
+  {id:"cla", sec:"Sobre você", type:"cla", q:"Qual é o seu clã?", ph:"Nome do clã", req:true},
   {id:"funcao", sec:"Sobre você", type:"single", q:"Como você participa do clã?", o:["Visitante","Membro","Núcleo","Líder de clã"]},
   {id:"tempo_cla", sec:"Sobre você", type:"single", q:"Há quanto tempo você está no clã?", o:["Menos de 1 mês","1 a 6 meses","6 meses a 1 ano","Mais de 1 ano"]},
   {id:"frequencia", sec:"Saúde do clã", type:"single", q:"Com que frequência você participa dos encontros?", o:["Toda semana","2 a 3 vezes por mês","1 vez por mês","Raramente"]},
@@ -122,6 +122,17 @@ const app = document.getElementById("app");
 { const ic = document.createElement("link"); ic.rel = "icon"; ic.href = LOGO; document.head.appendChild(ic); }
 const A = {};
 let step = -1;
+const OUTRO = "Meu clã não está na lista";
+let CLAS = [];
+
+/* Lista de clãs cadastrada no painel; vazia ou indisponível = campo de texto */
+async function carregarClas(){
+  if (!SUPABASE_URL) return;
+  try{
+    const r = await fetch(SUPABASE_URL + "/rest/v1/clas?select=nome&ativo=eq.true&order=nome", { headers:{"apikey":SUPABASE_KEY, "Authorization":"Bearer " + SUPABASE_KEY} });
+    if (r.ok) CLAS = (await r.json()).map(c => c.nome);
+  } catch(e){ CLAS = []; }
+}
 
 function visiveis(){ return Q.filter(q => !q.cond || q.cond(A)); }
 function esc(s){ return String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c])); }
@@ -137,7 +148,7 @@ function inicio(){
     '<h1>Minha caminhada no clã</h1>' +
     '<p class="lead">Suas respostas ajudam a liderança a cuidar melhor de cada pessoa e a preparar quem serve.</p>' +
     '<div class="facts"><span>Cerca de 3 minutos</span><span>Toque para responder</span></div>' +
-    '<div class="band">Nome e telefone são pedidos só no final, e só se você quiser receber um café online.</div></div>' +
+    '<div class="band">Nome e contato são pedidos só no final, e só se você quiser receber um café online.</div></div>' +
     '<div class="actions"><button class="btn primary grow" id="comecar" type="button">Começar</button></div>';
   document.getElementById("comecar").onclick = () => { step = 0; render(); };
 }
@@ -156,8 +167,16 @@ function render(){
     if (q.type === "cafe" && v === "Sim, quero"){
       corpo += '<div class="field"><label for="nome">Seu nome</label><input id="nome" type="text" autocomplete="name" value="' + esc(A.nome || "") + '"></div>' +
                '<div class="field"><label for="whatsapp">WhatsApp com DDD</label><input id="whatsapp" type="tel" autocomplete="tel" inputmode="tel" placeholder="(00) 00000-0000" value="' + esc(A.whatsapp || "") + '"></div>' +
-               '<p class="hint">Seu nome e telefone ficam só com a liderança do departamento e servem apenas para marcar o café.</p>';
+               '<div class="field"><label for="email">E-mail (opcional)</label><input id="email" type="email" autocomplete="email" inputmode="email" placeholder="seuemail@gmail.com" value="' + esc(A.email || "") + '"></div>' +
+               '<p class="hint">Seus dados ficam só com a liderança do departamento e servem apenas para marcar o café. Com e-mail, o convite do Google Meet chega direto na sua agenda.</p>';
     }
+  } else if (q.type === "cla" && CLAS.length){
+    const outro = A.claOutro;
+    corpo = '<div class="opts" role="group" aria-label="' + esc(q.q) + '">' + CLAS.concat([OUTRO]).map((o,i) =>
+      '<button type="button" class="opt" data-i="' + i + '" aria-pressed="' + (o === OUTRO ? !!outro : (!outro && v === o)) + '"><span class="mark"></span>' + esc(o) + '</button>').join("") + '</div>';
+    if (outro) corpo += '<div class="field"><label for="campo">Nome do seu clã</label><input id="campo" type="text" placeholder="' + esc(q.ph) + '" value="' + esc(v || "") + '"></div>';
+  } else if (q.type === "cla"){
+    corpo = '<div class="field"><label for="campo">Resposta</label><input id="campo" type="text" placeholder="' + esc(q.ph) + '" value="' + esc(v || "") + '"></div>';
   } else if (q.type === "multi"){
     const sel = v || [];
     corpo = '<p class="hint">Escolha quantas quiser.</p><div class="opts" role="group" aria-label="' + esc(q.q) + '">' + q.o.map((o,i) =>
@@ -173,7 +192,7 @@ function render(){
   }
   const ultimo = step === vs.length - 1;
   const precisaBotao = q.type !== "single" && q.type !== "scale";
-  const pronto = q.type === "text" ? !!(v && v.trim()) : q.type === "cafe" ? !!v : true;
+  const pronto = (q.type === "text" || q.type === "cla") ? !!(v && v.trim()) : q.type === "cafe" ? !!v : true;
   app.innerHTML = topo() +
     '<div class="progress" aria-hidden="true"><span style="width:' + pct + '%"></span></div>' +
     '<div class="meta"><span>' + esc(q.sec) + '</span><span>' + (step + 1) + ' de ' + vs.length + '</span></div>' +
@@ -197,13 +216,19 @@ function ligar(q, ultimo){
     if (q.type === "single"){ A[q.id] = q.o[+b.dataset.i]; render(); setTimeout(avancar, 200); }
     else if (q.type === "scale"){ A[q.id] = +b.dataset.n; render(); setTimeout(avancar, 200); }
     else if (q.type === "multi"){ const o = q.o[+b.dataset.i]; const s = new Set(A[q.id] || []); s.has(o) ? s.delete(o) : s.add(o); A[q.id] = [...s]; b.setAttribute("aria-pressed", s.has(o)); }
-    else if (q.type === "cafe"){ A.cafe = q.o[+b.dataset.i]; if (A.cafe !== "Sim, quero"){ delete A.nome; delete A.whatsapp; } render(); }
+    else if (q.type === "cafe"){ A.cafe = q.o[+b.dataset.i]; if (A.cafe !== "Sim, quero"){ delete A.nome; delete A.whatsapp; delete A.email; } render(); }
+    else if (q.type === "cla"){
+      const o = CLAS.concat([OUTRO])[+b.dataset.i];
+      if (o === OUTRO){ A.claOutro = true; if (CLAS.indexOf(A.cla) >= 0) delete A.cla; render(); }
+      else { A.claOutro = false; A.cla = o; render(); setTimeout(avancar, 200); }
+    }
   });
   const campo = document.getElementById("campo");
   if (campo){ campo.oninput = () => { A[q.id] = campo.value; if (seguir && q.req) seguir.disabled = !campo.value.trim(); }; campo.focus(); }
-  const nome = document.getElementById("nome"), zap = document.getElementById("whatsapp");
+  const nome = document.getElementById("nome"), zap = document.getElementById("whatsapp"), mail = document.getElementById("email");
   if (nome) nome.oninput = () => A.nome = nome.value;
   if (zap) zap.oninput = () => A.whatsapp = zap.value;
+  if (mail) mail.oninput = () => A.email = mail.value;
   if (seguir) seguir.onclick = avancar;
 }
 
@@ -213,7 +238,12 @@ function linha(){
     if (q.type === "cafe"){ r.quer_cafe = A.cafe === "Sim, quero"; }
     else if (A[q.id] !== undefined && A[q.id] !== "") r[q.id] = typeof A[q.id] === "string" ? A[q.id].trim() : A[q.id];
   });
-  if (r.quer_cafe){ if (A.nome) r.nome = A.nome.trim(); if (A.whatsapp) r.whatsapp = A.whatsapp.trim(); }
+  if (r.quer_cafe){
+    if (A.nome) r.nome = A.nome.trim();
+    if (A.whatsapp) r.whatsapp = A.whatsapp.trim();
+    const mail = (A.email || "").trim().toLowerCase();
+    if (/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(mail)) r.email = mail;
+  }
   return r;
 }
 
@@ -249,6 +279,7 @@ function fim(r, msg){
 }
 
 render();
+carregarClas();
 </script>
 
 </body>
